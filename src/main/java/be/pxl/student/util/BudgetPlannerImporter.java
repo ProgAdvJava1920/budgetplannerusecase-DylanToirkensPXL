@@ -1,13 +1,14 @@
 package be.pxl.student.util;
 
+import be.pxl.student.entity.Account;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Util class to import csv file
@@ -27,21 +28,17 @@ public class BudgetPlannerImporter {
         }
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line = null;
+            reader.readLine(); // skip first line
+            List<Account> accounts = new ArrayList<>();
+            AccountMapper accountMapper = new AccountMapper();
             while ((line = reader.readLine()) != null) {
-                //TODO parse lines
-                System.out.println(line);
-
+                accounts.add(accountMapper.map(line));
+            }
+            for (Account a : accounts) {
+                System.out.println(a);
             }
         } catch (IOException e) {
             LOGGER.fatal("An erroroccured while reading file: {}", path);
         }
-//        String[] lines = Files.lines(path)
-//                .toArray(String[]::new);
-
-//        for (int i = 1; i < lines.length; i++) {
-//            String[] lineInfo = lines[i].split(",");
-//            String accountName = lineInfo[accountNameIndex];
-//            String accountIBAN = lineInfo[accountIBANIndex];
-//        }
     }
 }
