@@ -16,6 +16,7 @@ import java.util.List;
 public class BudgetPlannerImporter {
     private static final Logger LOGGER = LogManager.getLogger(BudgetPlannerImporter.class);
     private PathMatcher csvMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.csv");
+    private AccountMapper accountMapper = new AccountMapper();
 
     public void importCsv(Path path) {
         if (!csvMatcher.matches(path)) {
@@ -29,13 +30,14 @@ public class BudgetPlannerImporter {
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line = null;
             reader.readLine(); // skip first line
-            List<Account> accounts = new ArrayList<>();
-            AccountMapper accountMapper = new AccountMapper();
+//            List<Account> accounts = new ArrayList<>();
             while ((line = reader.readLine()) != null) {
-                accounts.add(accountMapper.map(line));
-            }
-            for (Account a : accounts) {
-                System.out.println(a);
+                try {
+                    LOGGER.debug(accountMapper.map(line));
+                } catch (InvalidPaymentException e) {
+                    LOGGER.error("Error while mapping line: {}", e.getMessage());
+                }
+//                accounts.add(accountMapper.map(line));
             }
         } catch (IOException e) {
             LOGGER.fatal("An erroroccured while reading file: {}", path);
