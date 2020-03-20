@@ -19,9 +19,10 @@ public class AccountMapper {
         Account account = new Account();
         account.setName(split[0]);
         account.setIBAN(split[1]);
-        account.setPayments(new ArrayList<>());
-        Payment payment = new Payment(LocalDateTime.parse(split[3], FORMATTER), Float.parseFloat(split[4]), split[5], split[6]);
-        account.getPayments().add(payment);
+        // TODO move these 3 comments to payment mapper?
+//        account.setPayments(new ArrayList<>());
+//        Payment payment = new Payment(LocalDateTime.parse(split[3], FORMATTER), Float.parseFloat(split[4]), split[5], split[6]);
+//        account.getPayments().add(payment);
         return account;
     }
 }
