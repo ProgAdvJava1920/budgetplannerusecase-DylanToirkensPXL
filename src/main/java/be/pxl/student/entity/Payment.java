@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private LocalDateTime date;
     private float amount;
     private String currency;
@@ -27,6 +27,14 @@ public class Payment {
         this.amount = amount;
         this.currency = currency;
         this.detail = detail;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getDate() {
@@ -59,6 +67,22 @@ public class Payment {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Account getCounterAccount() {
+        return counterAccount;
+    }
+
+    public void setCounterAccount(Account counterAccount) {
+        this.counterAccount = counterAccount;
     }
 
     @Override

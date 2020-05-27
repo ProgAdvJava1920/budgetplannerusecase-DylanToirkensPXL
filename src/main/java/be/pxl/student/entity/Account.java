@@ -2,17 +2,19 @@ package be.pxl.student.entity;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
-@NamedQueries(@NamedQuery(name="findByName", query="SELECT a FROM Account a WHERE a.name = :name"))
+@NamedQueries({
+        @NamedQuery(name = "findByName", query = "SELECT a FROM Account a WHERE a.name = :name"),
+        @NamedQuery(name = "findByIban", query = "SELECT a FROM Account a WHERE a.IBAN = :iban")
+})
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String IBAN;
     private String name;
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.MERGE)
     private List<Payment> payments;
 
     public Account() {
@@ -43,15 +45,17 @@ public class Account {
         return payments;
     }
 
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
-
     @Override
     public String toString() {
         return "Account{" +
-                "IBAN='" + IBAN + '\'' +
+                "id=" + id +
+                ", IBAN='" + IBAN + '\'' +
                 ", name='" + name + '\'' +
-                ", payments=[" + payments.stream().map(Payment::toString).collect(Collectors.joining(",")) + "]}";
+                '}';
+    }
+
+    public void addPayment(Payment payment) {
+        payment.setAccount(this);
+        payments.add(payment);
     }
 }
