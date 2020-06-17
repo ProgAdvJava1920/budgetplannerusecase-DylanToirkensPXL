@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -35,8 +36,14 @@ public class LabelDaoImpl implements LabelDao {
 
     @Override
     public Label findLabelByName(String name) {
-        // TODO
-        return null;
+        TypedQuery<Label> query = entityManager.createNamedQuery("findLabelByName", Label.class);
+        LOGGER.info("query with name [" + name + "]");
+        query.setParameter("name", name);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
