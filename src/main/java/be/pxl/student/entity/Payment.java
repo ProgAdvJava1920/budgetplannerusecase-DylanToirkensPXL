@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "countPaymentsByLabel", query = "SELECT COUNT(p) FROM Payment p WHERE p.label.id = :labelId")
+})
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +20,8 @@ public class Payment {
     private Account account;
     @ManyToOne
     private Account counterAccount;
+    @OneToOne
+    private Label label;
 
     public Payment() {
         // JPA only
@@ -83,6 +88,14 @@ public class Payment {
 
     public void setCounterAccount(Account counterAccount) {
         this.counterAccount = counterAccount;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
     }
 
     @Override

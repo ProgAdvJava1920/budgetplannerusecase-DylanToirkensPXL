@@ -48,7 +48,7 @@ public class LabelsRest {
         try {
             labelService.removeLabel(labelId);
         } catch (LabelNotFoundException | LabelInUseException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(e)).build();
+            return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
