@@ -47,7 +47,7 @@ public class AccountsRest {
     @Path("{name}")
     public Response addPayment(@PathParam("name") String name, PaymentCreateResource paymentCreateResource) {
         try {
-            accountService.addPayment(name, paymentCreateResource.getCounterAccount(), paymentCreateResource.getAmount(), paymentCreateResource.getDetail());
+            accountService.addPayment(name, paymentCreateResource.getCounterAccount(), paymentCreateResource.getAmount(), paymentCreateResource.getDate(), paymentCreateResource.getDetail());
             return Response.created(UriBuilder.fromPath("/accounts/" + name).build()).build();
         } catch (AccountNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();

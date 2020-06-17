@@ -3,6 +3,7 @@ package be.pxl.student.rest.resources;
 public class PaymentCreateResource {
     private String counterAccount;
     private float amount;
+    private String date;
     private String detail;
 
     public String getCounterAccount() {
@@ -19,6 +20,14 @@ public class PaymentCreateResource {
 
     public void setAmount(float amount) {
         this.amount = amount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getDetail() {

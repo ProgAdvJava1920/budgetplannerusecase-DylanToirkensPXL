@@ -9,7 +9,10 @@ import be.pxl.student.entity.Payment;
 import be.pxl.student.util.EntityManagerUtil;
 
 import javax.ejb.Stateless;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Stateless
@@ -48,8 +51,7 @@ public class AccountService {
         return account.getPayments();
     }
 
-    // TODO LocalDate date param
-    public void addPayment(String name, String counterAccountIBAN, float amount, String detail) throws AccountNotFoundException {
+    public void addPayment(String name, String counterAccountIBAN, float amount, String date, String detail) throws AccountNotFoundException {
         Account account = accountDao.findAccountByName(name);
         if (account == null) {
             throw new AccountNotFoundException("There is no account with the name [" + name + "]");
@@ -64,7 +66,12 @@ public class AccountService {
         payment.setCounterAccount(counterAccount);
         payment.setAmount(amount);
         payment.setCurrency("EUR");
-        payment.setDate(LocalDateTime.now());
+        if (date == null) {
+            payment.setDate(LocalDateTime.now());
+        } else {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            payment.setDate(LocalDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.now()));
+        }
         payment.setDetail(detail);
         account.addPayment(payment);
         accountDao.updateAccount(account);
