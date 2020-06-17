@@ -25,8 +25,7 @@ public class LabelService {
     // TODO more methods?
 
     public List<Label> findAllLabels() {
-        // TODO
-        return null;
+        return labelDao.findAllLabels();
     }
 
     public void addLabel(String name) throws DuplicateLabelException {
