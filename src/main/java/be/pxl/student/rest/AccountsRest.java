@@ -1,14 +1,13 @@
 package be.pxl.student.rest;
 
-import be.pxl.student.rest.resources.AccountPaymentsResource;
-import be.pxl.student.util.exception.AccountAlreadyExistsException;
-import be.pxl.student.util.exception.AccountNotFoundException;
 import be.pxl.student.entity.Payment;
 import be.pxl.student.rest.resources.AccountCreateResource;
+import be.pxl.student.rest.resources.AccountPaymentsResource;
 import be.pxl.student.rest.resources.PaymentCreateResource;
 import be.pxl.student.rest.resources.PaymentResource;
 import be.pxl.student.service.AccountService;
-import com.sun.xml.bind.v2.util.CollisionCheckStack;
+import be.pxl.student.util.exception.AccountAlreadyExistsException;
+import be.pxl.student.util.exception.AccountNotFoundException;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

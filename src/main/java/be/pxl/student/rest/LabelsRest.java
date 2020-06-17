@@ -1,7 +1,6 @@
 package be.pxl.student.rest;
 
 import be.pxl.student.entity.Label;
-import be.pxl.student.rest.resources.ErrorMessage;
 import be.pxl.student.rest.resources.LabelCreateResource;
 import be.pxl.student.service.LabelService;
 import be.pxl.student.util.exception.DuplicateLabelException;
@@ -9,12 +8,7 @@ import be.pxl.student.util.exception.LabelInUseException;
 import be.pxl.student.util.exception.LabelNotFoundException;
 
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;

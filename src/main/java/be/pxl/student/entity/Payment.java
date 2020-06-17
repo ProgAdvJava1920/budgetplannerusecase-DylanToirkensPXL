@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @NamedQueries({
+        @NamedQuery(name = "findPaymentById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
         @NamedQuery(name = "countPaymentsByLabel", query = "SELECT COUNT(p) FROM Payment p WHERE p.label.id = :labelId")
 })
 public class Payment {
