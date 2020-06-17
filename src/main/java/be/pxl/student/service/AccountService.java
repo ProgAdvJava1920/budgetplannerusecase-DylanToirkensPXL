@@ -29,7 +29,7 @@ public class AccountService {
 
         account = accountDao.findAccountByIBAN(IBAN);
         if (account != null) {
-            if (account.getName() == null) {
+            if (account.getName() == null || account.getName().equals("")) {
                 account.setName(name);
                 accountDao.updateAccount(account);
                 return;
