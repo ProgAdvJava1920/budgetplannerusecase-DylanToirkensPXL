@@ -30,8 +30,14 @@ public class LabelDaoImpl implements LabelDao {
 
     @Override
     public Label findLabelById(long labelId) {
-        // TODO
-        return null;
+        TypedQuery<Label> query = entityManager.createNamedQuery("findLabelById", Label.class);
+        LOGGER.info("query with name [" + labelId + "]");
+        query.setParameter("id", labelId);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -48,7 +54,10 @@ public class LabelDaoImpl implements LabelDao {
 
     @Override
     public void removeLabel(Label label) {
-        // TODO
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        entityManager.remove(label);
+        transaction.commit();
     }
 
     @Override

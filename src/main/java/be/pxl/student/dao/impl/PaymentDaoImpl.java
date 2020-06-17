@@ -19,6 +19,6 @@ public class PaymentDaoImpl implements PaymentDao {
     @Override
     public Long countPaymentsByLabel(long labelId) {
         // TODO
-        return null;
+        return 0L;
     }
 }

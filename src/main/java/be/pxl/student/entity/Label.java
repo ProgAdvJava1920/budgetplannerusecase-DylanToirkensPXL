@@ -11,6 +11,7 @@ import java.util.Objects;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "findLabelByName", query = "SELECT l FROM Label l WHERE l.name = :name"),
+        @NamedQuery(name = "findLabelById", query = "SELECT l FROM Label l WHERE l.id = :id"),
         @NamedQuery(name = "findAllLabels", query = "SELECT l FROM Label l")
 })
 public class Label {

@@ -37,14 +37,14 @@ public class LabelService {
     }
 
     public void removeLabel(long labelId) throws LabelNotFoundException, LabelInUseException {
-        Label labelById = labelDao.findLabelById(labelId);
-        if (labelById == null) {
+        Label label = labelDao.findLabelById(labelId);
+        if (label == null) {
             throw new LabelNotFoundException("Label with id [" + labelId + "] cannot be found.");
         }
         Long numberOfPayments = paymentDao.countPaymentsByLabel(labelId);
         if (numberOfPayments > 0) {
-            throw new LabelInUseException("Label [" + labelById.getName() + "] is in use. Remove the payments first or change their label." );
+            throw new LabelInUseException("Label [" + label.getName() + "] is in use. Remove the payments first or change their label." );
         }
-        labelDao.removeLabel(labelById);
+        labelDao.removeLabel(label);
     }
 }
