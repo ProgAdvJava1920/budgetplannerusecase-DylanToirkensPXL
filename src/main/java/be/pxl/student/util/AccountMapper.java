@@ -1,11 +1,9 @@
 package be.pxl.student.util;
 
 import be.pxl.student.entity.Account;
-import be.pxl.student.entity.Payment;
+import be.pxl.student.util.exception.InvalidPaymentException;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class AccountMapper {

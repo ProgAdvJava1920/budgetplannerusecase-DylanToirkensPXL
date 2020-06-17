@@ -1,7 +1,9 @@
 package be.pxl.student.rest;
 
-import be.pxl.student.AccountNotFoundException;
+import be.pxl.student.util.exception.AccountAlreadyExistsException;
+import be.pxl.student.util.exception.AccountNotFoundException;
 import be.pxl.student.entity.Payment;
+import be.pxl.student.rest.resources.AccountCreateResource;
 import be.pxl.student.rest.resources.PaymentCreateResource;
 import be.pxl.student.rest.resources.PaymentResource;
 import be.pxl.student.service.AccountService;
@@ -18,6 +20,16 @@ import java.util.stream.Collectors;
 public class AccountsRest {
     @Inject
     private AccountService accountService;
+
+    @POST
+    public Response addAccount(AccountCreateResource accountCreateResource) {
+        try {
+            accountService.addAccount(accountCreateResource.getName(), accountCreateResource.getIban());
+            return Response.created(UriBuilder.fromPath("/accounts/" + accountCreateResource.getName()).build()).build();
+        } catch (AccountAlreadyExistsException e) {
+            return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        }
+    }
 
     @GET
     @Path("{name}")

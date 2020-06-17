@@ -20,6 +20,10 @@ public class Account {
     public Account() {
         // JPA only
     }
+    public Account(String name, String IBAN) {
+        setName(name);
+        setIBAN(IBAN);
+    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,7 @@
 package be.pxl.student.service;
 
-import be.pxl.student.AccountNotFoundException;
+import be.pxl.student.util.exception.AccountAlreadyExistsException;
+import be.pxl.student.util.exception.AccountNotFoundException;
 import be.pxl.student.dao.AccountDao;
 import be.pxl.student.dao.impl.AccountDaoImpl;
 import be.pxl.student.entity.Account;
@@ -18,6 +19,25 @@ public class AccountService {
 
     public AccountService() {
         accountDao = new AccountDaoImpl(EntityManagerUtil.createEntityManager());
+    }
+
+    public void addAccount(String name, String IBAN) throws AccountAlreadyExistsException {
+        Account account = accountDao.findAccountByName(name);
+        if (account != null) {
+            throw new AccountAlreadyExistsException("There already exists an account with the name [" + name + "]");
+        }
+
+        account = accountDao.findAccountByIBAN(IBAN);
+        if (account != null) {
+            if (account.getName() == null) {
+                account.setName(name);
+                accountDao.updateAccount(account);
+                return;
+            } else {
+                throw new AccountAlreadyExistsException("There already exists an account with IBAN [" + IBAN + "]");
+            }
+        }
+        accountDao.createAccount(new Account(name, IBAN));
     }
 
     public List<Payment> findPaymentsByAccountName(String name) throws AccountNotFoundException {
