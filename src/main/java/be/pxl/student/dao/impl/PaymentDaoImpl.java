@@ -52,4 +52,12 @@ public class PaymentDaoImpl implements PaymentDao {
         entityManager.merge(payment);
         transaction.commit();
     }
+
+    @Override
+    public void removePayment(Payment payment) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        entityManager.remove(payment);
+        transaction.commit();
+    }
 }

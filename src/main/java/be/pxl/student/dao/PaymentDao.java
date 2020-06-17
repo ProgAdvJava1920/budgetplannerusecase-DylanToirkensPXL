@@ -6,4 +6,5 @@ public interface PaymentDao {
     Payment findPaymentById(long paymentId);
     Long countPaymentsByLabel(long labelId);
     void updatePayment(Payment payment);
+    void removePayment(Payment payment);
 }

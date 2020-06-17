@@ -7,7 +7,6 @@ import be.pxl.student.dao.impl.PaymentDaoImpl;
 import be.pxl.student.entity.Label;
 import be.pxl.student.entity.Payment;
 import be.pxl.student.util.EntityManagerUtil;
-import be.pxl.student.util.exception.AccountNotFoundException;
 import be.pxl.student.util.exception.LabelNotFoundException;
 import be.pxl.student.util.exception.PaymentNotFoundException;
 
@@ -34,5 +33,13 @@ public class PaymentService {
         }
         payment.setLabel(label);
         paymentDao.updatePayment(payment);
+    }
+
+    public void removePayment(long paymentId) throws PaymentNotFoundException {
+        Payment payment = paymentDao.findPaymentById(paymentId);
+        if (payment == null) {
+            throw new PaymentNotFoundException("Payment with id [" + paymentId + "] cannot be found.");
+        }
+        paymentDao.removePayment(payment);
     }
 }
