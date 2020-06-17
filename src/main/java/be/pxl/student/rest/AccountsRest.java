@@ -8,6 +8,7 @@ import be.pxl.student.rest.resources.AccountCreateResource;
 import be.pxl.student.rest.resources.PaymentCreateResource;
 import be.pxl.student.rest.resources.PaymentResource;
 import be.pxl.student.service.AccountService;
+import com.sun.xml.bind.v2.util.CollisionCheckStack;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -35,10 +36,10 @@ public class AccountsRest {
     @GET
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPayments(@PathParam("name") String name) {
+    public Response getPayments(@PathParam("name") String name, @QueryParam("label") String label) {
         try {
             List<Payment> payments = accountService.findPaymentsByAccountName(name);
-            return Response.ok(mapToAccountPaymentResource(payments)).build();
+            return Response.ok(mapToAccountPaymentResource(payments, label)).build();
         } catch (AccountNotFoundException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
@@ -55,20 +56,30 @@ public class AccountsRest {
         }
     }
 
-    private AccountPaymentsResource mapToAccountPaymentResource(List<Payment> payments) {
+    private AccountPaymentsResource mapToAccountPaymentResource(List<Payment> payments, String labelFilter) {
         AccountPaymentsResource result = new AccountPaymentsResource();
-        result.setPayments(mapPayments(payments));
-        float receivingAmount = (float)payments.stream().filter(p -> p.getAmount() > 0).mapToDouble(Payment::getAmount).sum();
-        float spendingAmount = (float)payments.stream().filter(p -> p.getAmount() < 0).mapToDouble(Payment::getAmount).sum();
+        List<PaymentResource> paymentResources = mapPayments(payments, labelFilter);
+        float receivingAmount = (float)paymentResources.stream().filter(p -> p.getAmount() > 0).mapToDouble(PaymentResource::getAmount).sum();
+        float spendingAmount = (float)paymentResources.stream().filter(p -> p.getAmount() < 0).mapToDouble(PaymentResource::getAmount).sum();
         float resultAmount = receivingAmount + spendingAmount;
+
+        result.setPayments(paymentResources);
         result.setReceivingAmount(receivingAmount);
         result.setSpendingAmount(spendingAmount);
         result.setResultAmount(resultAmount);
         return result;
     }
 
-    private List<PaymentResource> mapPayments(List<Payment> payments) {
-        return payments.stream().map(p -> mapPayment(p)).collect(Collectors.toList());
+    private List<PaymentResource> mapPayments(List<Payment> payments, String labelFilter) {
+        if (labelFilter == null) {
+            return payments.stream().map(p -> mapPayment(p)).collect(Collectors.toList());
+        } else {
+            return payments.stream()
+                    .filter(p -> p.getLabel() != null)
+                    .filter(p -> p.getLabel().getName().equals(labelFilter))
+                    .map(p -> mapPayment(p))
+                    .collect(Collectors.toList());
+        }
     }
 
     private PaymentResource mapPayment(Payment payment) {
