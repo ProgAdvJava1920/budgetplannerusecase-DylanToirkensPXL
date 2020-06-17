@@ -1,14 +1,17 @@
 package be.pxl.student.rest.resources;
 
-import java.time.LocalDateTime;
+import be.pxl.student.entity.Label;
+
+import java.time.LocalDate;
 
 public class PaymentResource {
     private Long id;
     private String counterAccount;
-    private LocalDateTime date;
+    private LocalDate date;
     private float amount;
     private String currency;
     private String detail;
+    private Label label;
 
     public Long getId() {
         return id;
@@ -26,11 +29,11 @@ public class PaymentResource {
         this.counterAccount = counterAccount;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -56,5 +59,13 @@ public class PaymentResource {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
     }
 }

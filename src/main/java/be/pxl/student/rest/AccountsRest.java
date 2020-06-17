@@ -1,5 +1,6 @@
 package be.pxl.student.rest;
 
+import be.pxl.student.rest.resources.AccountPaymentsResource;
 import be.pxl.student.util.exception.AccountAlreadyExistsException;
 import be.pxl.student.util.exception.AccountNotFoundException;
 import be.pxl.student.entity.Payment;
@@ -37,7 +38,7 @@ public class AccountsRest {
     public Response getPayments(@PathParam("name") String name) {
         try {
             List<Payment> payments = accountService.findPaymentsByAccountName(name);
-            return Response.ok(mapPayments(payments)).build();
+            return Response.ok(mapToAccountPaymentResource(payments)).build();
         } catch (AccountNotFoundException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
@@ -54,6 +55,18 @@ public class AccountsRest {
         }
     }
 
+    private AccountPaymentsResource mapToAccountPaymentResource(List<Payment> payments) {
+        AccountPaymentsResource result = new AccountPaymentsResource();
+        result.setPayments(mapPayments(payments));
+        float receivingAmount = (float)payments.stream().filter(p -> p.getAmount() > 0).mapToDouble(Payment::getAmount).sum();
+        float spendingAmount = (float)payments.stream().filter(p -> p.getAmount() < 0).mapToDouble(Payment::getAmount).sum();
+        float resultAmount = receivingAmount + spendingAmount;
+        result.setReceivingAmount(receivingAmount);
+        result.setSpendingAmount(spendingAmount);
+        result.setResultAmount(resultAmount);
+        return result;
+    }
+
     private List<PaymentResource> mapPayments(List<Payment> payments) {
         return payments.stream().map(p -> mapPayment(p)).collect(Collectors.toList());
     }
@@ -64,7 +77,9 @@ public class AccountsRest {
         result.setAmount(payment.getAmount());
         result.setCounterAccount(payment.getCounterAccount().getIBAN());
         result.setCurrency(payment.getCurrency());
+        result.setDate(payment.getDate().toLocalDate());
         result.setDetail(payment.getDetail());
+        result.setLabel(payment.getLabel());
         return result;
     }
 }
